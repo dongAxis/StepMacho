@@ -1,0 +1,21 @@
+ARCH := $(shell echo $(ARCH))
+ROOT := $(shell echo $(ROOT))
+SDK_iOS := $(shell   xcodebuild -version -sdk iphoneos Path)
+TEST := /Users/axis/llvm-src/Release+Asserts/bin/clang -v
+CC_iOS := /Users/axis/llvm-xcode/Debug/bin/clang
+LD_iOS := $(CC_iOS)
+SYS_ROOT = -isysroot   $(SDK_iOS)
+SDK_SETTINGS_iOS = $(SYS_ROOT) -I$(SDK_iOS)/usr/include   -I$(SDK_iOS)/usr/local/include
+MIN_VER_iOS = -miphoneos-version-min=8.0
+ARCH_iOS = -arch $(ARCH)
+COMPILE_iOS_BC_2_OBJ=$(CC_iOS)   $(MIN_VER_iOS) $(SYS_ROOT) $(ARCH_iOS)
+LDFLAGS=$(SYS_ROOT) -dead_strip -fobjc-arc -fobjc-link-runtime -mllvm -ccf
+LINK_iOS_BIN=$(LD_iOS) $(ARCH_iOS) $(MIN_VER_iOS) $(LDFLAGS)  
+LDFLAGS_CUSTOM=-framework Foundation -framework UIKit 
+
+all:install
+
+clean: 
+	rm -rf ./*.o
+
+install:
